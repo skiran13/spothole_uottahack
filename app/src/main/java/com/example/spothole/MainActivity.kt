@@ -92,11 +92,14 @@ class MainActivity : AppCompatActivity() {
     private val mListener: SensorEventListener = object : SensorEventListener {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onSensorChanged(event: SensorEvent) {
-            //check
+            
+            //reading sensor's values to see if a pothole has been encountered
+            // Once a pothole has been encountered it's coordinates are instantly broadcasted through MQTT and stored in Firebase
             if (event.values[0] -9.8 > 8) {
             Log.d("MY_APP", event.values[1].toString())
                 sensorManager.unregisterListener(this)
                 if(getLocation()) {
+                    
                     mqttClient.publish(
                         "spothole",
                         currloc?.latitude.toString() + " , " + currloc?.longitude.toString()
@@ -142,6 +145,7 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
             }
             @Throws(Exception::class)
+            // receive msg through MQTT and save it to 'coordinates'
             override fun messageArrived(topic: String, mqttMessage: MqttMessage) {
                 Log.w("Debug", "Message received from host '$SOLACE_MQTT_HOST': $mqttMessage")
                 val coord = LatLng(mqttMessage.toString().split(',')[0].toDouble(), mqttMessage.toString().split(',')[1].toDouble());
@@ -169,7 +173,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        // check permission
+        // checking permissions
         if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Log.d("RPMT", "Coarse location success")
         } else {
@@ -207,7 +211,7 @@ class MainActivity : AppCompatActivity() {
 //        cameraintent=registerForActivityResult(){result->
 //
 //        }
-
+        // pass the coordinates to the next activity through intents
         var listPotholes: Button = findViewById(R.id.list_potholes)
         listPotholes.setOnClickListener{
             val i = (Intent(this, MapsActivity::class.java))
@@ -218,6 +222,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         var driveMode:Button = findViewById(R.id.drive_mode)
+        
+        // Connect to the MQTT host by subscribing to the topic and creating a sensor object for accelerometer
         driveMode.setOnClickListener{
             if(mqttClient.isConnected()) {
                 startActivity(
