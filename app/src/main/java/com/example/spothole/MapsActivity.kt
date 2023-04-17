@@ -2,7 +2,6 @@ package com.example.spothole
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -70,12 +69,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             for (document in result)
             {
                 Log.d(TAG, "Retrieving data $document")
-
-
-
                 var lt=document["Latitude"].toString()
                 var lngt=document["Longitude"].toString()
-
                 val Pots= PotholeData(lat=lt,longt=lngt)
                 data.add(Pots)
 
@@ -91,7 +86,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     var lt=document["Latitute"].toString()
                     var lngt=document["Long"].toString()
                     var url=document["url"].toString()
-
                     val image_pots= ImageData(lat=lt,longt=lngt,url=url)
                     data_img.add(image_pots)
                 }
@@ -108,7 +102,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     fun mapReady(){
 
-//        if(data.isNotEmpty()) {
         for (x in data_img) {
             val xlat = x.lat
             val xlong = x.longt
@@ -138,7 +131,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             Log.d(TAG, "onMapReady: printing values of Coordinates2 : $coordinates2")
         }
 
-//        }
         if(coordinates2.isNotEmpty()) {
             val builder = LatLngBounds.Builder()
             for (latLng in coordinates2) {
@@ -156,8 +148,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
 
         }
-
-
-
     }
 }

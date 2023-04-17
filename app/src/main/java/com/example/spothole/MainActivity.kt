@@ -52,7 +52,6 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
     private var PICK_IMAGE_REQUEST:Int?=1
     private var imageUri:Uri?=null
-//
     private lateinit var captureButton: Button
 
 
@@ -61,8 +60,6 @@ class MainActivity : AppCompatActivity() {
 
     private val REQUEST_IMAGE_CAPTURE = 1
     private val CAMERA_PERMISSION_CODE = 2
-//
-    //    private var ResultLauncher
     private lateinit var cameraintent: ActivityResultLauncher<Intent>
     private lateinit var imageView: ImageView
 
@@ -208,9 +205,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setMqttCallBack()
         checkForPermissions()
-//        cameraintent=registerForActivityResult(){result->
-//
-//        }
+
         // pass the coordinates to the next activity through intents
         var listPotholes: Button = findViewById(R.id.list_potholes)
         listPotholes.setOnClickListener{
@@ -256,7 +251,6 @@ class MainActivity : AppCompatActivity() {
             val intent= Intent(this,CaptureImage::class.java)
             intent.putExtra("coordinates", coordinates)
             startActivity(intent)
-           //cameraintent.launch(Intent("android.media.action.IMAGE_CAPTURE"))
         }
     }
 }
